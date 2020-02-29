@@ -5,19 +5,20 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.lalitp.zomatoapp.R
 import com.lalitp.zomatoapp.base.BaseViewModel
 import com.lalitp.zomatoapp.model.Restaurant
 import com.lalitp.zomatoapp.model.RestaurantData
+import com.lalitp.zomatoapp.model.location_api.LocationData
 import com.lalitp.zomatoapp.network.ApiService
-import com.lalitp.zomatoapp.utils.FROM_LOADMORE
-import com.lalitp.zomatoapp.utils.FROM_REFRESH
-import com.lalitp.zomatoapp.utils.FROM_START
+import com.lalitp.zomatoapp.utils.*
 import com.lalitp.zomatoapp.view.adapter.RestaurantListAdapter
 import com.lalitp.zomatoapp.view.widget.EndlessRecyclerViewScrollListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
+
 
 class ListViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
@@ -29,8 +30,9 @@ class ListViewModel : BaseViewModel() {
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
     val recyclerViewVisibility: MutableLiveData<Int> = MutableLiveData()
     val errorMessage: MutableLiveData<String> = MutableLiveData()
+    val locationTitle : MutableLiveData<String> = MutableLiveData()
 
-    val errorClickListener = View.OnClickListener { loadRestaurant(FROM_START) }
+    val errorClickListener = View.OnClickListener { searchRestaurant(FROM_START) }
     val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, 1)
 
     val isSwipeLoading = MutableLiveData<Boolean>()
@@ -39,11 +41,22 @@ class ListViewModel : BaseViewModel() {
     val count = MutableLiveData<Int>();
     val start = MutableLiveData<Int>();
 
+    private var fromAction : String ? = null
+    private var location : Location ? = null
+
+    val fgColor : MutableLiveData<Int> = MutableLiveData()
+
     private lateinit var subscription: Disposable
+
+    init {
+        fgColor.value = R.color.red_500
+    }
 
     fun fetchRestaurant(location: Location) {
         count.value = 15;
         start.value = 0;
+
+        this.location = location
 
         parameterMap["lon"] = location.longitude.toString()
         parameterMap["lat"] = location.latitude.toString()
@@ -51,7 +64,9 @@ class ListViewModel : BaseViewModel() {
         parameterMap["count"] = count.value.toString()
         parameterMap["start"] = start.value.toString()
 
-        loadRestaurant(FROM_START)
+
+        fromAction = FROM_NEAR_BY
+        loadNearByRestaurant(FROM_START)
     }
 
     override fun onCleared() {
@@ -62,12 +77,34 @@ class ListViewModel : BaseViewModel() {
     fun onSwipeRefresh() {
         start.value = 0
         isSwipeLoading.value = true
-        loadRestaurant(FROM_REFRESH)
+
+        if(fromAction == FROM_NEAR_BY)
+            loadNearByRestaurant(FROM_REFRESH)
+        else
+        searchRestaurant(FROM_REFRESH)
     }
 
-    private fun loadRestaurant(from: String) {
+    private fun searchRestaurant(from: String) {
 
         subscription = apiService.getRestaurant(parameterMap)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { onRetrievePostListStart(from) }
+            .doOnTerminate { onRetrievePostListFinish() }
+            .subscribe(
+                { result -> onRetrievePostListSuccess(from, result) },
+                { error -> onRetrievePostListError(error) }
+            )
+
+    }
+
+    private fun loadNearByRestaurant(from: String){
+
+        var param = HashMap<String,String> ()
+        param["lat"] = location?.latitude.toString()
+        param["lon"] = location?.longitude.toString()
+
+        subscription = apiService.getNearByRestaurant(param)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { onRetrievePostListStart(from) }
@@ -106,6 +143,20 @@ class ListViewModel : BaseViewModel() {
         }
     }
 
+    private fun onRetrievePostListSuccess(from: String, locationData: LocationData) {
+        isSwipeLoading.value = false
+
+        locationTitle.value = locationData.location.title
+        var listItem: List<Restaurant>? = locationData.nearbyRestaurants as List<Restaurant>?
+
+        if (from == FROM_START && from == FROM_REFRESH)
+            listAdapter.addRestaurantList(listItem!!)
+        else {
+            listAdapter.updateRestaurantList(listItem!!)
+        }
+    }
+
+
     private fun onRetrievePostListError(throwable: Throwable) {
         isSwipeLoading.value = false
         Log.v("onRetrievePostListError", throwable.message)
@@ -116,7 +167,7 @@ class ListViewModel : BaseViewModel() {
         return object : EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int) {
                 start.value = totalItemsCount + start.value!!
-                loadRestaurant(FROM_LOADMORE)
+                searchRestaurant(FROM_LOADMORE)
             }
         }
     }
@@ -125,7 +176,14 @@ class ListViewModel : BaseViewModel() {
         s: CharSequence, start: Int, before: Int,
         count: Int
     ) {
-        parameterMap["q"] = s.toString()
-        loadRestaurant(FROM_START)
+        Log.w("tag", "onTextChanged " + s);
+                    parameterMap["q"] = s.toString()
+                    searchRestaurant(FROM_START)
+    }
+
+    fun scrollListener(count: Int){
+ start.value = count + start.value!!
+        fromAction = FROM_SEARCH
+        searchRestaurant(FROM_LOADMORE)
     }
 }

@@ -15,33 +15,45 @@
         android:layout_height="match_parent"
         tools:context=".view.fragment.ListFragment">
 
-        <include
-            android:id="@+id/top"
-            layout="@layout/custom_floatview_dashborad_search" />
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        <LinearLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintTop_toBottomOf="@+id/top"
-            app:onRefreshListener="@{() -> viewModel.onSwipeRefresh()}"
-            app:refreshing="@{viewModel.isSwipeLoading}"
-            tools:ignore="MissingConstraints">
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:orientation="vertical"
+            app:layout_constraintRight_toRightOf="parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layoutManager="@{viewModel.staggeredGridLayoutManager}"
+            <include
+                android:id="@+id/top_view"
+                layout="@layout/custom_floatview_dashborad_search" />
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:onRefreshListener="@{() -> viewModel.onSwipeRefresh()}"
+                app:refreshing="@{viewModel.isSwipeLoading}"
+                app:fgColor="@{viewModel.fgColor}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:mutableAdapter="@{viewModel.listAdapter}"
-                app:mutableVisibility="@{viewModel.recyclerViewVisibility}"
-                tools:listitem="@layout/custom_restaurant_list" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                tools:ignore="MissingConstraints">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="@{viewModel.staggeredGridLayoutManager}"
+                    app:mutableAdapter="@{viewModel.listAdapter}"
+                    app:mutableVisibility="@{viewModel.recyclerViewVisibility}"
+                    tools:listitem="@layout/custom_restaurant_list" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
+
 
         <ProgressBar
             android:layout_width="wrap_content"

@@ -3,7 +3,7 @@
     <string name="restaurant_list">Restaurant</string>
     <string name="change">Change</string>
     <string name="your_location">Your Location</string>
-    <string name="search_for_restaurant_name">Search for restaurant name</string>
+    <string name="search_for_restaurant_name">Search for restaurants</string>
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
     <string name="post_error">Post Error</string>

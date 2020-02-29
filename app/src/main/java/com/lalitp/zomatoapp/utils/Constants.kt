@@ -12,4 +12,6 @@ const val CAMERA_REQUEST_CODE = 999
 const val FROM_START = "onStrart"
 const val FROM_REFRESH = "onRefresh"
 const val FROM_LOADMORE = "onLoadmore"
+const val FROM_NEAR_BY = "near_by"
+const val FROM_SEARCH = "search"
 

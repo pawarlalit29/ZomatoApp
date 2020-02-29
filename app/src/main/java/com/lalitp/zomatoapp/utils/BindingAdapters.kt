@@ -1,6 +1,5 @@
 package com.lalitp.zomatoapp.utils
 
-import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.RatingBar
@@ -10,11 +9,11 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.lalitp.zomatoapp.R
 import com.lalitp.zomatoapp.utils.extension.getParentActivity
-import com.lalitp.zomatoapp.view.widget.EndlessRecyclerViewScrollListener
 
 
 @BindingAdapter("mutableAdapter")
@@ -25,6 +24,14 @@ fun setAdapter(view: RecyclerView, adapter: RecyclerView.Adapter<*>) {
 @BindingAdapter("mutableScrollListener")
 fun setScrollListener(view: RecyclerView, scrollListener: RecyclerView.OnScrollListener){
     view.addOnScrollListener(scrollListener)
+}
+
+@BindingAdapter("fgColor")
+fun setSwipeListener(view: SwipeRefreshLayout,fgColor : MutableLiveData<Int>){
+    val parentActivity: AppCompatActivity? = view.getParentActivity()
+    if (parentActivity != null && fgColor !=null) {
+        fgColor.observe(parentActivity, Observer { values -> view.setColorSchemeResources(values) })
+    }
 }
 
 @BindingAdapter("mutableVisibility")
@@ -58,13 +65,11 @@ fun loadImage(view: ImageView, url: MutableLiveData<String>?) {
                     view
                 )
         })
-
-
     }
 }
 
 fun getRequestOption() : RequestOptions{
-    return RequestOptions.overrideOf(500)
+    return RequestOptions.overrideOf(300)
 }
 
 @BindingAdapter("mutableRating")

@@ -54,7 +54,7 @@
                     android:layout_marginLeft="@dimen/card_margin_side"
                     android:layout_weight="1"
                     android:maxLines="1"
-                    android:text="Mumbai"
+                    android:text="@{viewModel.locationTitle}"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold" />

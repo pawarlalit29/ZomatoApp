@@ -49,6 +49,7 @@ class ListFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(ListViewModel::class.java)
         binding.lifecycleOwner = this // Use viewLifecycleOwner for fragments
         binding.viewModel = viewModel
+        binding.topView.viewModel = viewModel
         return binding.root
     }
 
@@ -63,9 +64,7 @@ class ListFragment : Fragment() {
             if (errorMessage != null) showError(errorMessage) else hideError()
         })
 
-        binding.recyclerview.addOnScrollListener(viewModel.onScrollListener())
-
-        binding.top.imgLocation.setOnClickListener {
+        binding.topView.imgLocation.setOnClickListener {
             getLastLocation()
         }
     }
@@ -73,7 +72,7 @@ class ListFragment : Fragment() {
 
     @SuppressLint("ResourceAsColor")
     private fun showError(errorMessage: String) {
-        errorSnackbar = Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_INDEFINITE)
+        errorSnackbar = Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_SHORT)
         errorSnackbar?.setAction(R.string.retry, viewModel.errorClickListener)
         errorSnackbar?.show()
     }
