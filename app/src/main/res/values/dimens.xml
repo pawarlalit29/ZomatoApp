@@ -1,0 +1,29 @@
+<resources>
+
+
+
+    <!-- Text sizes -->
+    <dimen name="text_size_extra_micro_">4sp</dimen>
+    <dimen name="text_size_extra_micro_6">6sp</dimen>
+    <dimen name="text_size_extra_micro_8">8sp</dimen>
+    <dimen name="text_size_extra_micro">10sp</dimen>
+    <dimen name="text_size_micro">12sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_large_">20sp</dimen>
+    <dimen name="text_size_extra_large">24sp</dimen>
+    <dimen name="text_icon_size_small">20sp</dimen>
+    <dimen name="text_icon_size_medium">30sp</dimen>
+    <dimen name="text_icon_size_medium_">28sp</dimen>
+    <dimen name="text_icon_size">36sp</dimen>
+    <dimen name="toolbar_text_size_large">17dp</dimen>
+    <dimen name="toolbar_text_size_small">15dp</dimen>
+
+    <dimen name="card_margin_10">10dp</dimen>
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="card_margin_17">17dp</dimen>
+    <dimen name="card_margin_18">18dp</dimen>
+    <dimen name="card_margin_side">5dp</dimen>
+    <dimen name="edittext_margin_side">20dp</dimen>
+</resources>

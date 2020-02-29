@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lalitp.zomatoapp.viewmodel.ListViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/lv_header_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/card_margin_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/your_location"
+                android:textAllCaps="true"
+                android:textColor="@color/myTextSecondaryColor"
+                android:textSize="@dimen/text_size_micro" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_location_on_green_500_18dp" />
+
+                <TextView
+                    android:id="@+id/txt_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/card_margin_side"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:text="Mumbai"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_change"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@string/change"
+                    android:textAllCaps="true"
+                    android:textColor="@color/green_500"
+                    android:visibility="gone"
+                    android:textSize="@dimen/text_size_small" />
+
+                <ImageView
+                    android:id="@+id/img_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/card_margin_side"
+                    android:src="@drawable/ic_my_location_red_24dp" />
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/card_margin_side"
+                android:layout_weight="1">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edt_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_round_bg_grey"
+                    android:drawableLeft="@drawable/ic_search_grey_500_18dp"
+                    android:drawablePadding="@dimen/card_margin_side"
+                    android:focusableInTouchMode="true"
+                    android:hint="@string/search_for_restaurant_name"
+                    android:imeOptions="actionSearch"
+                    android:padding="@dimen/card_margin_side"
+                    android:singleLine="true"
+                    android:onTextChanged="@{viewModel.onPasswordTextChanged}"
+                    android:textColor="@color/myTextPrimaryColor" />
+
+                <ImageView
+                    android:id="@+id/btn_cancel_searchBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/card_margin_10"
+                    android:background="@color/grey_200"
+                    android:src="@drawable/ic_circle_close_grey_18dp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
