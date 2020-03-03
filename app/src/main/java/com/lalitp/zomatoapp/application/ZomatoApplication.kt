@@ -1,4 +1,4 @@
-package com.atulsia.shrujanlldc.application
+package com.lalitp.zomatoapp.application
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
